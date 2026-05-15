@@ -79,7 +79,8 @@
     }
 
     .copy-btn,
-    .open-btn {
+    .open-btn,
+    .theory-copy-btn {
       padding: 10px 16px;
       border: none;
       border-radius: 8px;
@@ -105,6 +106,36 @@
 
     .open-btn:hover {
       background: #d97706;
+    }
+
+    .theory-copy-btn {
+      background: #8b5cf6;
+      color: white;
+      margin-right: 10px;
+    }
+
+    .theory-copy-btn:hover {
+      background: #7c3aed;
+    }
+
+    .theory-box {
+      background:#132238;
+      padding:20px;
+      border-radius:12px;
+      margin-bottom:20px;
+      border:1px solid #334155;
+      line-height:1.8;
+    }
+
+    .theory-box h3 {
+      color:#38bdf8;
+      margin-bottom:15px;
+      font-size:24px;
+    }
+
+    .theory-content {
+      white-space: pre-wrap;
+      color:#dbeafe;
     }
 
     pre {
@@ -192,8 +223,51 @@
       bfs: {
         title: 'Parallel BFS using OpenMP',
         type: 'code',
-        theory: `Theory:
-Breadth First Search (BFS) traverses graph level by level. OpenMP is used here to process nodes in parallel for faster execution. Queue data structure stores nodes to visit and visited array prevents revisiting nodes.`,
+        theory: `================ THEORY OF PARALLEL BFS ================
+
+1. INTRODUCTION:
+Breadth First Search (BFS) is a graph traversal algorithm that explores nodes level by level. It first visits the source node, then all neighboring nodes, then neighbors of those nodes.
+
+2. ALGORITHM USED:
+Algorithm Name: Breadth First Search (BFS)
+Parallel Technology: OpenMP
+Data Structure Used: Queue
+
+3. WORKING OF BFS:
+Step 1: Start from source node.
+Step 2: Mark source as visited.
+Step 3: Insert source node into queue.
+Step 4: Remove node from queue.
+Step 5: Visit all adjacent unvisited nodes.
+Step 6: Insert neighbors into queue.
+Step 7: Repeat until queue becomes empty.
+
+4. WHY OPENMP IS USED:
+OpenMP enables parallel execution using multiple CPU threads. Different nodes can be processed simultaneously, reducing traversal time.
+
+5. IMPORTANT FUNCTIONS:
+- #pragma omp parallel for : Executes loop in parallel.
+- #pragma omp critical : Prevents race condition.
+- queue<int> : Stores traversal order.
+- vector<bool> visited : Tracks visited nodes.
+
+6. TIME COMPLEXITY:
+Sequential BFS : O(V + E)
+Parallel BFS : Faster execution due to multithreading.
+
+7. APPLICATIONS:
+- Social Network Analysis
+- Web Crawlers
+- Network Broadcasting
+- GPS Navigation
+- AI Search Problems
+
+8. ADVANTAGES:
+- Faster graph traversal
+- Efficient for large graphs
+- Better CPU utilization
+
+=========================================================`,
         code: `// =========================================================
 // PRACTICAL : Parallel Breadth First Search (BFS)
 // TECHNOLOGY: OpenMP
@@ -295,8 +369,50 @@ int main()
       dfs: {
         title: 'Parallel DFS using OpenMP',
         type: 'code',
-        theory: `Theory:
-Depth First Search (DFS) traverses graph depth wise. Stack data structure is used and OpenMP parallel sections improve traversal performance.`,
+        theory: `================ THEORY OF PARALLEL DFS ================
+
+1. INTRODUCTION:
+Depth First Search (DFS) is a graph traversal algorithm that explores one branch completely before moving to another branch.
+
+2. ALGORITHM USED:
+Algorithm Name: Depth First Search (DFS)
+Parallel Technology: OpenMP
+Data Structure Used: Stack
+
+3. WORKING OF DFS:
+Step 1: Start from source node.
+Step 2: Mark node as visited.
+Step 3: Push node into stack.
+Step 4: Pop node from stack.
+Step 5: Visit all adjacent nodes.
+Step 6: Repeat until stack becomes empty.
+
+4. WHY OPENMP IS USED:
+OpenMP allows parallel processing of neighboring nodes which improves performance for large graphs.
+
+5. IMPORTANT FUNCTIONS:
+- stack<int> : Stores DFS nodes.
+- #pragma omp parallel for : Parallel execution.
+- #pragma omp critical : Synchronization.
+- visited[] : Prevents revisiting.
+
+6. TIME COMPLEXITY:
+Sequential DFS : O(V + E)
+Parallel DFS : Improved performance using multithreading.
+
+7. APPLICATIONS:
+- Maze Solving
+- Path Finding
+- Cycle Detection
+- Artificial Intelligence
+- Backtracking Problems
+
+8. ADVANTAGES:
+- Memory efficient
+- Faster exploration
+- Suitable for recursive problems
+
+=========================================================`,
         code: `// =========================================================
 // PRACTICAL : Parallel Depth First Search (DFS)
 // TECHNOLOGY: OpenMP
@@ -1022,15 +1138,28 @@ int main()
         <div class="header">
           <h2>${practical.title}</h2>
           <div>
+            <button class="theory-copy-btn" onclick="copyTheory()">Copy Theory</button>
             ${extraButton}
             <button class="copy-btn" onclick="copyCode()">Copy Code</button>
           </div>
         </div>
 
-        ${practical.theory ? `<div style="background:#132238;padding:15px;border-radius:10px;margin-bottom:15px;border:1px solid #334155;"><h3 style="margin-bottom:10px;color:#38bdf8;">Theory & Explanation</h3><p style="line-height:1.7;">${practical.theory}</p></div>` : ''}
+        ${practical.theory ? `<div class="theory-box"><h3>Theory & Explanation</h3><div class="theory-content" id="theory-block">${practical.theory}</div></div>` : ''}
 
         <pre><code id="code-block">${escapeHtml(practical.code)}</code></pre>
       `;
+    }
+
+    function copyTheory() {
+      const theory = document.getElementById('theory-block').innerText;
+      navigator.clipboard.writeText(theory);
+
+      const btn = document.querySelector('.theory-copy-btn');
+      btn.innerText = 'Theory Copied!';
+
+      setTimeout(() => {
+        btn.innerText = 'Copy Theory';
+      }, 1500);
     }
 
     function copyCode() {
